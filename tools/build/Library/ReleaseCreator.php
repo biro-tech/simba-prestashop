@@ -52,14 +52,7 @@ class ReleaseCreator
      * @var array
      */
     protected $filesRemoveList = [
-        '.php-cs-fixer.dist.php',
-        '.DS_Store',
-        '.gitignore',
-        '.gitmodules',
-        '.travis.yml',
         'package-lock.json',
-        '.babelrc',
-        'postcss.config.js',
     ];
 
     /**
@@ -75,60 +68,70 @@ class ReleaseCreator
      * @var array
      */
     protected $patternsRemoveList = [
-        'tools/contrib$',
+        // VCS and CI/CD
+        '(.*)?\.git(.*)?$',
         'travis\-scripts$',
+        '(.*)?\.travis\.',
+        '\.scrutinizer\.yml$',
+        '\.github/copilot-instructions\.md$',
         'CONTRIBUTING\.md$',
+        
+        // Build and Development Tools
         'composer\.json$',
-        'diff\-hooks\.php',
         '(.*)?\.composer$',
+        '.*\.eslintrc$',
+        '.*\.eslintignore$',
+        '.*\.editorconfig$',
+        '.*\.babelrc$',
+        'postcss\.config\.js$',
         '.*\.map$',
         '.*\.psd$',
-        '.*\.md$',
-        '.*\.rst$',
-        '.*phpunit(.*)?',
-        '(.*)?\.travis\.',
-        '.*\.DS_Store$',
-        '.*\.eslintrc$',
-        '.*\.editorconfig$',
-        'web/.*$',
-        'app/config/parameters\.yml$',
-        'app/config/parameters\.php$',
-        'config/settings\.inc\.php$',
-        'app/cache/..*$',
-        '\.t9n\.yml$',
-        '\.scrutinizer\.yml$',
         'admin/(.*/)?webpack\.config\.js$',
         'admin/(.*/)?package\.json$',
         'admin/(.*/)?bower\.json$',
         'admin/(.*/)?config\.rb$',
+        '.*node_modules.*',
+        '\.webpack$',
+        'rector\.php',
+        'phpstan(.*)?',
+        '\.php-?cs.*',
+        
+        // Project specific internals
+        'tools/contrib$',
+        'diff\-hooks\.php',
+        'web/.*$',
+        'app/config/parameters\.yml$',
+        'app/config/parameters\.php$',
+        'config/settings\.inc\.php$',
+        '\.t9n\.yml$',
         'admin/themes/default/sass$',
-        //'admin/themes/new\-theme/js$',
         'admin/themes/new\-theme/scss$',
         'themes/_core$',
         'themes/classic/_dev',
         'themes/webpack\.config\.js$',
         'themes/package\.json$',
-        'vendor\/[a-zA-Z0-0_-]+\/[a-zA-Z0-0_-]+\/[Tt]ests?$',
-        'vendor/tecnickcom/tcpdf/examples$',
         'app/cache/..*$',
         '.idea',
         'tools/build$',
         'tools/foreignkeyGenerator$',
-        '.*node_modules.*',
-        '\.eslintignore$',
-        '\.eslintrc\.js$',
-        '\.php_cs\.dist$',
         'tools/assets$',
-        '\.webpack$',
-        'rector\.php',
-        'phpstan(.*)?',
         '\.header-stamp.*',
-        // Filter AI tools (MD files are alredy filtered via a generic rule above)
+
+        // Documentation and Tests
+        '.*\.md$',
+        '.*\.rst$',
+        '.*phpunit(.*)?',
+        'vendor\/[a-zA-Z0-0_-]+\/[a-zA-Z0-0_-]+\/[Tt]ests?$',
+        'vendor/tecnickcom/tcpdf/examples$',
+
+        // Filter AI tools
         '\.ai.*',
         '\.claude.*',
         '\.cursor.*',
         '\.windsurf.*',
-        '\.github/copilot-instructions\.md$',
+
+        // OS specific
+        '.*\.DS_Store$',
     ];
 
     /**

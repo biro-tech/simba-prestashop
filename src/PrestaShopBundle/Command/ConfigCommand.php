@@ -154,11 +154,14 @@ class ConfigCommand extends Command
         }
         $languages = $this->languageDataProvider->getLanguages($onlyActive, $onlyShopId);
 
-        $found = current(array_filter($languages, function (array $item) use ($inputlang) {
-            $key = is_numeric($inputlang) ? 'id_lang' : 'iso_code';
-
-            return isset($item[$key]) && $inputlang == $item[$key];
-        }));
+        $lookupKey = is_numeric($inputlang) ? 'id_lang' : 'iso_code';
+        $found = null;
+        foreach ($languages as $language) {
+            if (isset($language[$lookupKey]) && (string) $inputlang === (string) $language[$lookupKey]) {
+                $found = $language;
+                break;
+            }
+        }
 
         if (!$found) {
             throw new Exception('Invalid language', self::STATUS_INVALID_OPTIONS);

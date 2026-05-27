@@ -45,12 +45,8 @@ class FloatParser
      * @throws InvalidArgumentException if the provided value is not a string
      *                                  or if it cannot be interpreted as a number
      */
-    public function fromString($value)
+    public function fromString(string $value): float
     {
-        if (!is_string($value)) {
-            throw new InvalidArgumentException(sprintf('Invalid argument: string expected, got %s', gettype($value)));
-        }
-
         $value = trim($value);
         if ('' === $value) {
             return 0.0;
