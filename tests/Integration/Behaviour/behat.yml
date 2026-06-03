@@ -1,5 +1,12 @@
 default:
   suites:
+    hook-module:
+      paths:
+        - "%paths.base%/Features/Scenario/Hook"
+      contexts:
+        - Tests\Integration\Behaviour\Features\Context\CommonFeatureContext
+        - Tests\Integration\Behaviour\Features\Context\ModuleFeatureContext
+        - Tests\Integration\Behaviour\Features\Context\Domain\Hook\HookModuleFeatureContext
     contact:
       paths:
         - "%paths.base%/Features/Scenario/Contact"
@@ -37,6 +44,13 @@ default:
         - Tests\Integration\Behaviour\Features\Context\CommonFeatureContext
         - Tests\Integration\Behaviour\Features\Context\Domain\TitleFeatureContext
         - Tests\Integration\Behaviour\Features\Context\TitleFeatureContext
+        - Tests\Integration\Behaviour\Features\Context\LanguageFeatureContext
+    quick_access:
+      paths:
+        - "%paths.base%/Features/Scenario/QuickAccess"
+      contexts:
+        - Tests\Integration\Behaviour\Features\Context\CommonFeatureContext
+        - Tests\Integration\Behaviour\Features\Context\Domain\QuickAccessFeatureContext
         - Tests\Integration\Behaviour\Features\Context\LanguageFeatureContext
     store:
       paths:
