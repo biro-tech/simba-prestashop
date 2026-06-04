@@ -12,6 +12,7 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use PrestaShop\PrestaShop\Core\Util\ArabicToLatinDigitConverter;
 use PrestaShopBundle\Utils\FloatParser;
+use stdClass;
 use TypeError;
 
 class FloatParserTest extends TestCase
@@ -119,7 +120,7 @@ class FloatParserTest extends TestCase
             [null],
             [[]],
             [[123]],
-            [new \stdClass()],
+            [new stdClass()],
         ];
     }
 }
