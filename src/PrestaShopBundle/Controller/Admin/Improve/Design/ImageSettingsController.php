@@ -249,8 +249,6 @@ class ImageSettingsController extends PrestaShopAdminController
         return $this->redirectToRoute('admin_image_settings_index');
     }
 
-
-
     /**
      * Regenerate thumbnails.
      *

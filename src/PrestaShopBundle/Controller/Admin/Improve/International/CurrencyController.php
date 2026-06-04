@@ -599,5 +599,4 @@ class CurrencyController extends PrestaShopAdminController
             ),
         ];
     }
-
 }

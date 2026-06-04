@@ -196,5 +196,4 @@ class SearchEnginesController extends PrestaShopAdminController
             ],
         ];
     }
-
 }

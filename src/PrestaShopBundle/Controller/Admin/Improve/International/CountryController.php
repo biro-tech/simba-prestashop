@@ -377,5 +377,4 @@ class CountryController extends PrestaShopAdminController
             ),
         ];
     }
-
 }

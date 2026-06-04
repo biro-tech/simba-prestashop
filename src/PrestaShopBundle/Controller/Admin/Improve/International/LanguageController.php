@@ -395,5 +395,4 @@ class LanguageController extends PrestaShopAdminController
             ],
         ];
     }
-
 }
