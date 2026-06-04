@@ -15,6 +15,6 @@ class HashingTest extends TestCase
     {
         $hash = new Hashing();
 
-        self::assertSame($hash->hash('some_data_to_hash', 'this_is_the_salt'), 'c7c8f9a991ac0dcb7a33ded423acf0d8');
+        self::assertSame($hash->hash('some_data_to_hash', 'this_is_the_salt'), '6341b13ca966de51a6b2ab8bedd18304e41ae05215869d353cbb5e704ce7b4c9');
     }
 }
