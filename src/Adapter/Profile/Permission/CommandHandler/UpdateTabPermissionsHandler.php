@@ -42,9 +42,8 @@ final class UpdateTabPermissionsHandler implements UpdateTabPermissionsHandlerIn
 
             // Reset cache so that following queries are up-to-date
             Profile::resetStaticCache();
-        } catch (Exception) {
-            // If role slug is not found it raises an exception
-            $result = 'error';
+        } catch (Exception $e) {
+            throw new PermissionUpdateException('Failed to update permissions', 0, $e);
         }
 
         if ('error' === $result) {

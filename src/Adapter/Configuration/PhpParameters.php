@@ -59,21 +59,15 @@ class PhpParameters
     /**
      * Persist the modifications done on the original configuration file.
      *
-     * @return bool
+     * @throws IOException when the file cannot be written
      */
-    public function saveConfiguration()
+    public function saveConfiguration(): void
     {
-        try {
-            $filesystem = new Filesystem();
-            $filesystem->dumpFile($this->filename, '<?php return ' . var_export($this->configuration->get(), true) . ';' . "\n");
+        $filesystem = new Filesystem();
+        $filesystem->dumpFile($this->filename, '<?php return ' . var_export($this->configuration->get(), true) . ';' . "\n");
 
-            if (function_exists('opcache_invalidate')) {
-                @opcache_invalidate($this->filename);
-            }
-        } catch (IOException) {
-            return false;
+        if (function_exists('opcache_invalidate')) {
+            @opcache_invalidate($this->filename);
         }
-
-        return true;
     }
 }

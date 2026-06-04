@@ -430,16 +430,18 @@ class ModuleController extends ModuleAbstractController
                 'Admin.Modules.Notification',
             );
         } catch (Exception $e) {
+            $disableError = '';
             try {
                 $moduleManager->disable($moduleName);
-            } catch (Exception) {
+            } catch (Exception $disableException) {
+                $disableError = ' ' . $disableException->getMessage();
             }
             $installationResponse['status'] = false;
             $installationResponse['msg'] = $this->trans(
                 'Installation of module %module% failed. %error%',
                 [
                     '%module%' => $moduleName,
-                    '%error%' => $e->getMessage(),
+                    '%error%' => $e->getMessage() . $disableError,
                 ],
                 'Admin.Modules.Notification',
             );
