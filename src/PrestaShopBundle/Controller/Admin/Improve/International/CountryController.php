@@ -234,7 +234,7 @@ class CountryController extends PrestaShopAdminController
     #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))", redirectRoute: 'admin_countries_index')]
     public function bulkEnableAction(Request $request): RedirectResponse
     {
-        $countryIds = $this->getBulkCountriesFromRequest($request);
+        $countryIds = $this->getBulkIdsFromRequest($request, 'country_bulk');
 
         try {
             $this->dispatchCommand(new BulkToggleCountriesStatusCommand(true, $countryIds));
@@ -253,7 +253,7 @@ class CountryController extends PrestaShopAdminController
     #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))", redirectRoute: 'admin_countries_index')]
     public function bulkDisableAction(Request $request): RedirectResponse
     {
-        $countryIds = $this->getBulkCountriesFromRequest($request);
+        $countryIds = $this->getBulkIdsFromRequest($request, 'country_bulk');
 
         try {
             $this->dispatchCommand(new BulkToggleCountriesStatusCommand(false, $countryIds));
@@ -378,11 +378,4 @@ class CountryController extends PrestaShopAdminController
         ];
     }
 
-    /**
-     * @return int[]
-     */
-    private function getBulkCountriesFromRequest(Request $request): array
-    {
-        return array_map('intval', $request->request->all('country_bulk'));
-    }
 }

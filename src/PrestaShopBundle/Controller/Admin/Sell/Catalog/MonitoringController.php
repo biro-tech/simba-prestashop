@@ -153,7 +153,7 @@ class MonitoringController extends PrestaShopAdminController
     public function deleteBulkAction(Request $request): RedirectResponse
     {
         $gridIdentifiers = $this->identifySearchableGrid($request);
-        $productIds = $this->getBulkProductsFromRequest($request, $gridIdentifiers);
+        $productIds = $this->getBulkIdsFromRequest($request, sprintf('%s_monitoring_products_bulk', $gridIdentifiers['grid_id']));
 
         try {
             $this->dispatchCommand(new BulkDeleteProductCommand(
@@ -169,23 +169,6 @@ class MonitoringController extends PrestaShopAdminController
         }
 
         return $this->redirectToRoute('admin_monitorings_index');
-    }
-
-    /**
-     * @param Request $request
-     * @param array $gridIdentifiers
-     *
-     * @return array
-     */
-    private function getBulkProductsFromRequest(Request $request, array $gridIdentifiers): array
-    {
-        $productIds = $request->request->all(sprintf('%s_%s', $gridIdentifiers['grid_id'], 'monitoring_products_bulk'));
-
-        foreach ($productIds as $i => $productId) {
-            $productIds[$i] = (int) $productId;
-        }
-
-        return $productIds;
     }
 
     /**

@@ -308,7 +308,7 @@ class StateController extends PrestaShopAdminController
     #[AdminSecurity("is_granted('delete', request.get('_legacy_controller'))", redirectRoute: 'admin_states_index', message: 'You do not have permission to delete this.')]
     public function deleteBulkAction(Request $request): RedirectResponse
     {
-        $stateIds = $this->getBulkStatesFromRequest($request);
+        $stateIds = $this->getBulkIdsFromRequest($request, 'state_states_bulk');
 
         try {
             $this->dispatchCommand(new BulkDeleteStateCommand($stateIds));
@@ -334,7 +334,7 @@ class StateController extends PrestaShopAdminController
     #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))", redirectRoute: 'admin_states_index')]
     public function bulkEnableAction(Request $request): RedirectResponse
     {
-        $stateIds = $this->getBulkStatesFromRequest($request);
+        $stateIds = $this->getBulkIdsFromRequest($request, 'state_states_bulk');
 
         try {
             $this->dispatchCommand(new BulkToggleStateStatusCommand(true, $stateIds));
@@ -361,7 +361,7 @@ class StateController extends PrestaShopAdminController
     #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))", redirectRoute: 'admin_states_index')]
     public function bulkDisableAction(Request $request): RedirectResponse
     {
-        $stateIds = $this->getBulkStatesFromRequest($request);
+        $stateIds = $this->getBulkIdsFromRequest($request, 'state_states_bulk');
 
         try {
             $this->dispatchCommand(new BulkToggleStateStatusCommand(false, $stateIds));
@@ -408,41 +408,11 @@ class StateController extends PrestaShopAdminController
         return $this->redirectToRoute('admin_states_index');
     }
 
-    /**
-     * @return array
-     */
     private function getToolbarButtons(): array
     {
-        $toolbarButtons = [];
-
-        $toolbarButtons['add'] = [
-            'href' => $this->generateUrl('admin_states_create'),
-            'desc' => $this->trans('Add new state', [], 'Admin.International.Feature'),
-            'icon' => 'add_circle_outline',
-        ];
-
-        return $toolbarButtons;
+        return $this->getAddToolbarButton('admin_states_create', $this->trans('Add new state', [], 'Admin.International.Feature'));
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return array
-     */
-    private function getBulkStatesFromRequest(Request $request): array
-    {
-        $stateIds = $request->request->all('state_states_bulk');
-
-        foreach ($stateIds as $i => $stateId) {
-            $stateIds[$i] = (int) $stateId;
-        }
-
-        return $stateIds;
-    }
-
-    /**
-     * @return array
-     */
     private function getErrorMessages(): array
     {
         return [

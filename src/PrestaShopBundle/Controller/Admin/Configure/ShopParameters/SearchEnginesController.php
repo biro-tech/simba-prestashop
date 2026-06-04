@@ -153,7 +153,7 @@ class SearchEnginesController extends PrestaShopAdminController
     #[AdminSecurity("is_granted('delete', request.get('_legacy_controller'))", redirectRoute: 'admin_search_engines_index')]
     public function bulkDeleteAction(Request $request): RedirectResponse
     {
-        $searchEngineIds = $this->getBulkSearchEnginesFromRequest($request);
+        $searchEngineIds = $this->getBulkIdsFromRequest($request, 'search_engine_bulk');
 
         try {
             $this->dispatchCommand(new BulkDeleteSearchEngineCommand($searchEngineIds));
@@ -197,17 +197,4 @@ class SearchEnginesController extends PrestaShopAdminController
         ];
     }
 
-    /**
-     * Get search engine IDs from request for bulk actions.
-     *
-     * @param Request $request
-     *
-     * @return int[]
-     */
-    private function getBulkSearchEnginesFromRequest(Request $request): array
-    {
-        $searchEngineIds = $request->request->all('search_engine_bulk');
-
-        return array_map('intval', $searchEngineIds);
-    }
 }

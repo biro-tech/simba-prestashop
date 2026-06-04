@@ -426,7 +426,7 @@ class CurrencyController extends PrestaShopAdminController
     #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))", redirectRoute: 'admin_currencies_index')]
     public function bulkToggleStatusAction(Request $request, string $status): RedirectResponse
     {
-        $currenciesIds = $this->getBulkCurrenciesFromRequest($request);
+        $currenciesIds = $this->getBulkIdsFromRequest($request, 'currency_currency_bulk');
         $expectedStatus = 'enable' === $status;
 
         try {
@@ -457,7 +457,7 @@ class CurrencyController extends PrestaShopAdminController
     #[AdminSecurity("is_granted('delete', request.get('_legacy_controller'))", redirectRoute: 'admin_currencies_index')]
     public function bulkDeleteAction(Request $request): RedirectResponse
     {
-        $currenciesIds = $this->getBulkCurrenciesFromRequest($request);
+        $currenciesIds = $this->getBulkIdsFromRequest($request, 'currency_currency_bulk');
 
         try {
             $this->dispatchCommand(new BulkDeleteCurrenciesCommand($currenciesIds));
@@ -600,21 +600,4 @@ class CurrencyController extends PrestaShopAdminController
         ];
     }
 
-    /**
-     * Get currencies ids from request for bulk action
-     *
-     * @param Request $request
-     *
-     * @return int[]
-     */
-    private function getBulkCurrenciesFromRequest(Request $request): array
-    {
-        $currenciesIds = $request->request->all('currency_currency_bulk');
-
-        foreach ($currenciesIds as $i => $currencyId) {
-            $currenciesIds[$i] = (int) $currencyId;
-        }
-
-        return $currenciesIds;
-    }
 }

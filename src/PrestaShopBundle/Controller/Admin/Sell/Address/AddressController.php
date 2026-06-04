@@ -143,7 +143,7 @@ class AddressController extends PrestaShopAdminController
     #[AdminSecurity("is_granted('delete', request.get('_legacy_controller'))", redirectRoute: 'admin_addresses_index', message: 'You do not have permission to delete this.')]
     public function deleteBulkAction(Request $request): RedirectResponse
     {
-        $addressIds = $this->getBulkAddressesFromRequest($request);
+        $addressIds = $this->getBulkIdsFromRequest($request, 'address_addresses_bulk');
 
         try {
             $this->dispatchCommand(new BulkDeleteAddressCommand($addressIds));
@@ -158,20 +158,9 @@ class AddressController extends PrestaShopAdminController
         return $this->redirectToRoute('admin_addresses_index');
     }
 
-    /**
-     * @return array
-     */
     private function getAddressToolbarButtons(): array
     {
-        $toolbarButtons = [];
-
-        $toolbarButtons['add'] = [
-            'href' => $this->generateUrl('admin_addresses_create'),
-            'desc' => $this->trans('Add new address', [], 'Admin.Orderscustomers.Feature'),
-            'icon' => 'add_circle_outline',
-        ];
-
-        return $toolbarButtons;
+        return $this->getAddToolbarButton('admin_addresses_create', $this->trans('Add new address', [], 'Admin.Orderscustomers.Feature'));
     }
 
     /**
@@ -182,22 +171,6 @@ class AddressController extends PrestaShopAdminController
         $requiredFields = $this->dispatchQuery(new GetRequiredFieldsForAddress());
 
         return $this->createForm(RequiredFieldsAddressType::class, ['required_fields' => $requiredFields]);
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return array
-     */
-    private function getBulkAddressesFromRequest(Request $request): array
-    {
-        $addressIds = $request->request->all('address_addresses_bulk');
-
-        foreach ($addressIds as $i => $addressId) {
-            $addressIds[$i] = (int) $addressId;
-        }
-
-        return $addressIds;
     }
 
     /**

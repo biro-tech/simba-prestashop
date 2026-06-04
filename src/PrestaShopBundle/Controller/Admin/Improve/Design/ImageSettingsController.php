@@ -233,7 +233,7 @@ class ImageSettingsController extends PrestaShopAdminController
     #[AdminSecurity("is_granted('delete', request.get('_legacy_controller'))", redirectRoute: 'admin_image_settings_index')]
     public function bulkDeleteAction(Request $request): RedirectResponse
     {
-        $ids = $this->getBulkIdsFromRequest($request);
+        $ids = $this->getBulkIdsFromRequest($request, 'image_type_bulk');
 
         try {
             $this->dispatchCommand(new BulkDeleteImageTypeCommand($ids));
@@ -249,19 +249,7 @@ class ImageSettingsController extends PrestaShopAdminController
         return $this->redirectToRoute('admin_image_settings_index');
     }
 
-    /**
-     * Collects IDs from request.
-     *
-     * @param Request $request
-     *
-     * @return array
-     */
-    private function getBulkIdsFromRequest(Request $request): array
-    {
-        $ids = $request->request->all('image_type_bulk');
 
-        return array_map('intval', $ids);
-    }
 
     /**
      * Regenerate thumbnails.

@@ -303,7 +303,7 @@ class OrderStateController extends PrestaShopAdminController
     #[AdminSecurity("is_granted('delete', request.get('_legacy_controller'))", redirectRoute: 'admin_order_states', message: 'You do not have permission to delete this.')]
     public function deleteOrderReturnStateBulkAction(Request $request): RedirectResponse
     {
-        $orderReturnStateIds = $this->getBulkOrderReturnStatesFromRequest($request);
+        $orderReturnStateIds = $this->getBulkIdsFromRequest($request, 'order_return_states_order_return_states_bulk');
 
         try {
             $this->dispatchCommand(new BulkDeleteOrderReturnStateCommand($orderReturnStateIds));
@@ -408,7 +408,7 @@ class OrderStateController extends PrestaShopAdminController
     #[AdminSecurity("is_granted('delete', request.get('_legacy_controller'))", redirectRoute: 'admin_order_states', message: 'You do not have permission to delete this.')]
     public function deleteBulkAction(Request $request): RedirectResponse
     {
-        $orderStateIds = $this->getBulkOrderStatesFromRequest($request);
+        $orderStateIds = $this->getBulkIdsFromRequest($request, 'order_states_order_states_bulk');
 
         try {
             $this->dispatchCommand(new BulkDeleteOrderStateCommand($orderStateIds));
@@ -421,27 +421,6 @@ class OrderStateController extends PrestaShopAdminController
         }
 
         return $this->redirectToRoute('admin_order_states');
-    }
-
-    private function getBulkOrderStatesFromRequest(Request $request): array
-    {
-        $orderStateIds = $request->request->all('order_states_order_states_bulk');
-        if (empty($orderStateIds)) {
-            return [];
-        }
-
-        return array_map(function (string $orderStateId): int {
-            return (int) $orderStateId;
-        }, $orderStateIds);
-    }
-
-    private function getBulkOrderReturnStatesFromRequest(Request $request): array
-    {
-        $orderReturnStateIds = $request->request->all('order_return_states_order_return_states_bulk');
-
-        return array_map(static function (string $orderReturnStateId) {
-            return (int) $orderReturnStateId;
-        }, $orderReturnStateIds);
     }
 
     /**

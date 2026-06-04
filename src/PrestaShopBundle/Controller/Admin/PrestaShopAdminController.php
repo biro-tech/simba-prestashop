@@ -434,4 +434,30 @@ class PrestaShopAdminController extends AbstractController
     {
         return $this->trans('This functionality has been disabled.', [], 'Admin.Notifications.Error');
     }
+
+    /**
+     * @param string $requestKey The request parameter name for the bulk action (e.g. 'zone_bulk')
+     *
+     * @return int[]
+     */
+    protected function getBulkIdsFromRequest(Request $request, string $requestKey): array
+    {
+        return array_map('intval', $request->request->all($requestKey));
+    }
+
+    /**
+     * @param array<string, mixed> $routeParams
+     *
+     * @return array{add: array{href: string, desc: string, icon: string}}
+     */
+    protected function getAddToolbarButton(string $route, string $label, array $routeParams = []): array
+    {
+        return [
+            'add' => [
+                'href' => $this->generateUrl($route, $routeParams),
+                'desc' => $label,
+                'icon' => 'add_circle_outline',
+            ],
+        ];
+    }
 }

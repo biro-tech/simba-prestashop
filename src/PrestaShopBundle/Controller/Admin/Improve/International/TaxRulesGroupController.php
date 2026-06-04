@@ -361,7 +361,7 @@ class TaxRulesGroupController extends PrestaShopAdminController
     #[AdminSecurity("is_granted('delete', request.get('_legacy_controller'))", redirectRoute: 'admin_tax_rules_groups_index')]
     public function bulkDeleteTaxRulesAction(Request $request): RedirectResponse
     {
-        $taxRuleIds = $this->getBulkTaxRulesFromRequest($request);
+        $taxRuleIds = $this->getBulkIdsFromRequest($request, 'tax_rules_bulk');
 
         // Resolve the group ID from the first tax rule
         $taxRulesGroupId = 0;
@@ -456,7 +456,7 @@ class TaxRulesGroupController extends PrestaShopAdminController
     #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))", redirectRoute: 'admin_tax_rules_groups_index')]
     public function bulkEnableStatusAction(Request $request): RedirectResponse
     {
-        $taxRulesGroupIds = $this->getBulkTaxRulesGroupFromRequest($request);
+        $taxRulesGroupIds = $this->getBulkIdsFromRequest($request, 'tax_rules_group_bulk');
 
         try {
             $this->dispatchCommand(new BulkSetTaxRulesGroupStatusCommand($taxRulesGroupIds, true));
@@ -481,7 +481,7 @@ class TaxRulesGroupController extends PrestaShopAdminController
     #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))", redirectRoute: 'admin_tax_rules_groups_index')]
     public function bulkDisableStatusAction(Request $request): RedirectResponse
     {
-        $taxRulesGroupIds = $this->getBulkTaxRulesGroupFromRequest($request);
+        $taxRulesGroupIds = $this->getBulkIdsFromRequest($request, 'tax_rules_group_bulk');
 
         try {
             $this->dispatchCommand(new BulkSetTaxRulesGroupStatusCommand($taxRulesGroupIds, false));
@@ -506,7 +506,7 @@ class TaxRulesGroupController extends PrestaShopAdminController
     #[AdminSecurity("is_granted('delete', request.get('_legacy_controller'))", redirectRoute: 'admin_tax_rules_groups_index')]
     public function bulkDeleteAction(Request $request): RedirectResponse
     {
-        $taxRulesGroupIds = $this->getBulkTaxRulesGroupFromRequest($request);
+        $taxRulesGroupIds = $this->getBulkIdsFromRequest($request, 'tax_rules_group_bulk');
 
         try {
             $this->dispatchCommand(new BulkDeleteTaxRulesGroupCommand($taxRulesGroupIds));
@@ -521,58 +521,14 @@ class TaxRulesGroupController extends PrestaShopAdminController
         return $this->redirectToRoute('admin_tax_rules_groups_index');
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return array
-     */
-    private function getBulkTaxRulesGroupFromRequest(Request $request): array
-    {
-        $taxRulesGroupIds = $request->request->all('tax_rules_group_bulk');
-
-        return array_map('intval', $taxRulesGroupIds);
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return array
-     */
-    private function getBulkTaxRulesFromRequest(Request $request): array
-    {
-        $taxRuleIds = $request->request->all('tax_rules_bulk');
-
-        return array_map('intval', $taxRuleIds);
-    }
-
-    /**
-     * @return array
-     */
     private function getTaxRulesGroupToolbarButtons(): array
     {
-        return [
-            'add' => [
-                'href' => $this->generateUrl('admin_tax_rules_groups_create'),
-                'desc' => $this->trans('Add new tax rules group', [], 'Admin.International.Feature'),
-                'icon' => 'add_circle_outline',
-            ],
-        ];
+        return $this->getAddToolbarButton('admin_tax_rules_groups_create', $this->trans('Add new tax rules group', [], 'Admin.International.Feature'));
     }
 
-    /**
-     * @param int $taxRulesGroupId
-     *
-     * @return array
-     */
     private function getTaxRuleToolbarButtons(int $taxRulesGroupId): array
     {
-        return [
-            'add' => [
-                'href' => $this->generateUrl('admin_tax_rules_create', ['taxRulesGroupId' => $taxRulesGroupId]),
-                'desc' => $this->trans('Add new tax rule', [], 'Admin.International.Feature'),
-                'icon' => 'add_circle_outline',
-            ],
-        ];
+        return $this->getAddToolbarButton('admin_tax_rules_create', $this->trans('Add new tax rule', [], 'Admin.International.Feature'), ['taxRulesGroupId' => $taxRulesGroupId]);
     }
 
     /**

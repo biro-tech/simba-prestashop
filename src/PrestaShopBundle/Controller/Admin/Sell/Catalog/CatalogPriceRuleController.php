@@ -150,7 +150,7 @@ class CatalogPriceRuleController extends PrestaShopAdminController
     #[AdminSecurity("is_granted('delete', request.get('_legacy_controller'))", redirectRoute: 'admin_catalog_price_rules_index')]
     public function bulkDeleteAction(Request $request)
     {
-        $catalogPriceRuleIds = $this->getBulkCatalogPriceRulesFromRequest($request);
+        $catalogPriceRuleIds = $this->getBulkIdsFromRequest($request, 'catalog_price_rule_bulk');
 
         try {
             $this->dispatchCommand(new BulkDeleteCatalogPriceRuleCommand($catalogPriceRuleIds));
@@ -287,24 +287,6 @@ class CatalogPriceRuleController extends PrestaShopAdminController
                 'Admin.Notifications.Error'
             ),
         ];
-    }
-
-    /**
-     * Provides catalog price rule ids from request of bulk action
-     *
-     * @param Request $request
-     *
-     * @return array
-     */
-    private function getBulkCatalogPriceRulesFromRequest(Request $request)
-    {
-        $catalogPriceRuleIds = $request->request->all('catalog_price_rule_bulk');
-
-        foreach ($catalogPriceRuleIds as &$catalogPriceRuleId) {
-            $catalogPriceRuleId = (int) $catalogPriceRuleId;
-        }
-
-        return $catalogPriceRuleIds;
     }
 
     /**
