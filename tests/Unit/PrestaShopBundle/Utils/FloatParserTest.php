@@ -12,6 +12,7 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use PrestaShop\PrestaShop\Core\Util\ArabicToLatinDigitConverter;
 use PrestaShopBundle\Utils\FloatParser;
+use TypeError;
 
 class FloatParserTest extends TestCase
 {
@@ -57,7 +58,7 @@ class FloatParserTest extends TestCase
      */
     public function testItThrowsTypeErrorIfNotString($value)
     {
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
 
         (new FloatParser(new ArabicToLatinDigitConverter()))->fromString($value);
     }
