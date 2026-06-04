@@ -78,7 +78,7 @@ class EmployeeSessionSubscriber implements EventSubscriberInterface
 
         // Create new employee session
         $employeeSession = new EmployeeSession();
-        $employeeSession->setToken(bin2hex(random_bytes(32)));
+        $employeeSession->setToken(bin2hex(random_bytes(20)));
         $employee->addSession($employeeSession);
         $this->entityManager->persist($employeeSession);
         $this->entityManager->flush();

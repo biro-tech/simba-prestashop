@@ -159,7 +159,7 @@ class EmployeePasswordResetter
     {
         $validityDuration = (int) ($this->configuration->get('PS_PASSWD_RESET_VALIDITY') ?: 1440);
         $employee
-            ->setResetPasswordToken(bin2hex(random_bytes(32)))
+            ->setResetPasswordToken(bin2hex(random_bytes(20)))
             ->setResetPasswordValidity((new DateTime())->add(DateInterval::createFromDateString($validityDuration . 'min')))
         ;
         $this->entityManager->flush();
