@@ -636,7 +636,7 @@ class ValidateCore
      */
     public static function isHashedPassword($hashedPasswd)
     {
-        return Tools::strlen($hashedPasswd) == 32 || Tools::strlen($hashedPasswd) == 60;
+        return Tools::strlen($hashedPasswd) == 32 || Tools::strlen($hashedPasswd) == 60 || Tools::strlen($hashedPasswd) == 64;
     }
 
     /**

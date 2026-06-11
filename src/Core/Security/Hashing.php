@@ -10,6 +10,6 @@ class Hashing
 {
     public function hash(string $passwd, string $salt): string
     {
-        return md5($salt . $passwd);
+        return hash_hmac('sha256', $passwd, $salt);
     }
 }

@@ -19,9 +19,10 @@ class StatisticsControllerCore extends FrontController
             die;
         }
 
-        if ($_POST['type'] == 'navinfo') {
+        $type = Tools::getValue('type');
+        if ($type === 'navinfo') {
             $this->processNavigationStats();
-        } elseif ($_POST['type'] == 'pagetime') {
+        } elseif ($type === 'pagetime') {
             $this->processPageTime();
         } else {
             exit;
@@ -34,21 +35,21 @@ class StatisticsControllerCore extends FrontController
     protected function processNavigationStats(): void
     {
         $id_guest = (int) Tools::getValue('id_guest');
-        if (sha1($id_guest . _COOKIE_KEY_) != $this->param_token) {
+        if (!hash_equals(sha1($id_guest . _COOKIE_KEY_), (string) $this->param_token)) {
             die;
         }
 
-        $guest = new Guest((int) substr($_POST['id_guest'], 0, 10));
+        $guest = new Guest($id_guest);
         $guest->javascript = true;
-        $guest->screen_resolution_x = (int) substr($_POST['screen_resolution_x'], 0, 5);
-        $guest->screen_resolution_y = (int) substr($_POST['screen_resolution_y'], 0, 5);
-        $guest->screen_color = (int) substr($_POST['screen_color'], 0, 3);
-        $guest->sun_java = (int) substr($_POST['sun_java'], 0, 1);
-        $guest->adobe_flash = (int) substr($_POST['adobe_flash'], 0, 1);
-        $guest->adobe_director = (int) substr($_POST['adobe_director'], 0, 1);
-        $guest->apple_quicktime = (int) substr($_POST['apple_quicktime'], 0, 1);
-        $guest->real_player = (int) substr($_POST['real_player'], 0, 1);
-        $guest->windows_media = (int) substr($_POST['windows_media'], 0, 1);
+        $guest->screen_resolution_x = (int) Tools::getValue('screen_resolution_x');
+        $guest->screen_resolution_y = (int) Tools::getValue('screen_resolution_y');
+        $guest->screen_color = (int) Tools::getValue('screen_color');
+        $guest->sun_java = (int) Tools::getValue('sun_java');
+        $guest->adobe_flash = (int) Tools::getValue('adobe_flash');
+        $guest->adobe_director = (int) Tools::getValue('adobe_director');
+        $guest->apple_quicktime = (int) Tools::getValue('apple_quicktime');
+        $guest->real_player = (int) Tools::getValue('real_player');
+        $guest->windows_media = (int) Tools::getValue('windows_media');
         $guest->update();
     }
 
@@ -62,7 +63,7 @@ class StatisticsControllerCore extends FrontController
         $time_start = Tools::getValue('time_start');
         $id_page = (int) Tools::getValue('id_page');
 
-        if (sha1($id_connection . $id_page . $time_start . _COOKIE_KEY_) != $this->param_token) {
+        if (!hash_equals(sha1($id_connection . $id_page . $time_start . _COOKIE_KEY_), (string) $this->param_token)) {
             die;
         }
 
