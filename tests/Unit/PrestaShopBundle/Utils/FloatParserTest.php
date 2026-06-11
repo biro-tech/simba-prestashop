@@ -13,6 +13,7 @@ use PHPUnit\Framework\TestCase;
 use PrestaShop\PrestaShop\Core\Util\ArabicToLatinDigitConverter;
 use PrestaShopBundle\Utils\FloatParser;
 use stdClass;
+use TypeError;
 
 class FloatParserTest extends TestCase
 {
@@ -32,17 +33,33 @@ class FloatParserTest extends TestCase
     }
 
     /**
-     * Given a value that is not a string
+     * Given a string value that cannot be interpreted as a number
      * When constructing an ImmutableFloat from that value using ::fromString
      * Then an InvalidArgumentException should be thrown
      *
-     * @param mixed $value
+     * @param string $value
      *
-     * @dataProvider provideInvalidValues
+     * @dataProvider provideInvalidStringValues
      */
-    public function testItThrowsExceptionIfNotValid($value)
+    public function testItThrowsExceptionIfNotValid(string $value)
     {
         $this->expectException(InvalidArgumentException::class);
+
+        (new FloatParser(new ArabicToLatinDigitConverter()))->fromString($value);
+    }
+
+    /**
+     * Given a value that is not a string
+     * When constructing an ImmutableFloat from that value using ::fromString
+     * Then a TypeError should be thrown
+     *
+     * @param mixed $value
+     *
+     * @dataProvider provideNonStringValues
+     */
+    public function testItThrowsTypeErrorIfNotString($value)
+    {
+        $this->expectException(TypeError::class);
 
         (new FloatParser(new ArabicToLatinDigitConverter()))->fromString($value);
     }
@@ -81,7 +98,7 @@ class FloatParserTest extends TestCase
         ];
     }
 
-    public function provideInvalidValues()
+    public function provideInvalidStringValues()
     {
         return [
             ['1,'],
@@ -92,6 +109,12 @@ class FloatParserTest extends TestCase
             ['1foo'],
             ['0xff'],
             ['minus 10'],
+        ];
+    }
+
+    public function provideNonStringValues()
+    {
+        return [
             [false],
             [true],
             [null],

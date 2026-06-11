@@ -42,8 +42,7 @@ class FloatParser
      *
      * @return float
      *
-     * @throws InvalidArgumentException if the provided value is not a string
-     *                                  or if it cannot be interpreted as a number
+     * @throws InvalidArgumentException if the provided value cannot be interpreted as a number
      */
     public function fromString(string $value): float
     {
