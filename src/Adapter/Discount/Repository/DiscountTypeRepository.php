@@ -8,6 +8,7 @@ namespace PrestaShop\PrestaShop\Adapter\Discount\Repository;
 
 use Doctrine\DBAL\Connection;
 use Exception;
+use PrestaShop\PrestaShop\Core\Domain\Discount\Exception\CannotUpdateDiscountException;
 
 /**
  * Repository for discount type operations
@@ -121,9 +122,9 @@ class DiscountTypeRepository
      * @param int $discountId
      * @param array $compatibleTypeIds
      *
-     * @return bool
+     * @throws CannotUpdateDiscountException
      */
-    public function setCompatibleTypesForDiscount(int $discountId, array $compatibleTypeIds): bool
+    public function setCompatibleTypesForDiscount(int $discountId, array $compatibleTypeIds): void
     {
         $this->connection->beginTransaction();
 
@@ -153,12 +154,14 @@ class DiscountTypeRepository
             }
 
             $this->connection->commit();
-
-            return true;
         } catch (Exception $e) {
             $this->connection->rollBack();
 
-            return false;
+            throw new CannotUpdateDiscountException(
+                sprintf('Failed to set compatible types for discount #%d', $discountId),
+                CannotUpdateDiscountException::FAILED_UPDATE_CONDITIONS,
+                $e
+            );
         }
     }
 

@@ -474,7 +474,14 @@ class DiscountFormDataProvider implements FormDataProviderInterface
                         'is_guest' => (int) $customer->is_guest,
                     ],
                 ];
-            } catch (CustomerNotFoundException $e) {
+            } catch (CustomerNotFoundException) {
+                $session = $this->requestStack->getSession();
+                if ($session instanceof FlashBagAwareSessionInterface) {
+                    $session->getFlashBag()->add(
+                        'warning',
+                        sprintf('Customer #%d referenced by this discount no longer exists.', $customerId)
+                    );
+                }
             }
         }
 

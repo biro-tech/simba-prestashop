@@ -234,8 +234,7 @@ class ThemeCatalogueLayersProvider implements CatalogueLayersProviderInterface
             );
             try {
                 $moduleCatalogue->addCatalogue($moduleProvider->getFileTranslatedCatalogue($locale));
-            } catch (Exception) {
-                // no translations found
+            } catch (TranslationFilesNotFoundException) {
             }
         }
 

@@ -264,8 +264,12 @@ class AbstractMultiShopObjectModelRepository extends AbstractObjectModelReposito
             $rows = Db::getInstance()->executeS($query);
 
             return array_map(fn (array $row) => (int) $row['id_shop'], $rows);
-        } catch (PrestaShopDatabaseException|PrestaShopException) {
-            return [];
+        } catch (PrestaShopDatabaseException|PrestaShopException $e) {
+            throw new CoreException(
+                sprintf('Failed to fetch associated shop IDs for %s #%d', $objectModelClassName, $id),
+                0,
+                $e
+            );
         }
     }
 

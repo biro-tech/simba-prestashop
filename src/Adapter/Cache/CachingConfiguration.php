@@ -9,6 +9,7 @@ namespace PrestaShop\PrestaShop\Adapter\Cache;
 use PrestaShop\PrestaShop\Adapter\Configuration\PhpParameters;
 use PrestaShop\PrestaShop\Core\Cache\Clearer\CacheClearerInterface;
 use PrestaShop\PrestaShop\Core\Configuration\DataConfigurationInterface;
+use Symfony\Component\Filesystem\Exception\IOException;
 
 /**
  * This class manages Caching configuration for a Shop.
@@ -122,7 +123,9 @@ class CachingConfiguration implements DataConfigurationInterface
             $this->phpParameters->setProperty('parameters.ps_caching', $configuration['caching_system']);
         }
 
-        if (false === $this->phpParameters->saveConfiguration()) {
+        try {
+            $this->phpParameters->saveConfiguration();
+        } catch (IOException) {
             $errors[] = [
                 'key' => 'The settings file cannot be overwritten.',
                 'domain' => 'Admin.Advparameters.Notification',

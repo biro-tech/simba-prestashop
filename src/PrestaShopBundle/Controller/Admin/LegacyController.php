@@ -276,8 +276,7 @@ class LegacyController extends PrestaShopAdminController
 
             return $reflector->getDeclaringClass()->getName() !== AdminControllerCore::class;
         } catch (ReflectionException) {
+            return false;
         }
-
-        return false;
     }
 }

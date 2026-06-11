@@ -78,9 +78,7 @@ class PhpParametersTest extends TestCase
     {
         $parameterReader = new PhpParameters($this->parametersSampleFile);
 
-        $result = $parameterReader->saveConfiguration();
-
-        $this->assertTrue($result);
+        $parameterReader->saveConfiguration();
 
         $parametersSampleFileContentAfterSave = file_get_contents($this->parametersSampleFile);
 
@@ -95,9 +93,7 @@ class PhpParametersTest extends TestCase
         $parameterReader = new PhpParameters($this->parametersSampleFile);
         $parameterReader->setProperty('parameters.b', 'PrestaShop');
 
-        $result = $parameterReader->saveConfiguration();
-
-        $this->assertTrue($result);
+        $parameterReader->saveConfiguration();
 
         $parametersSampleFileContentModified = file_get_contents(
             dirname(__DIR__, 2) . '/Resources/config/params_modified.php'
