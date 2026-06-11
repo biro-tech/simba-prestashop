@@ -213,7 +213,7 @@ class AttachmentController extends PrestaShopAdminController
     #[AdminSecurity("is_granted('delete', request.get('_legacy_controller'))", redirectRoute: 'admin_attachments_index', message: 'You do not have permission to delete this.')]
     public function deleteBulkAction(Request $request): RedirectResponse
     {
-        $attachmentIds = $this->getBulkAttachmentsFromRequest($request);
+        $attachmentIds = $this->getBulkIdsFromRequest($request, 'attachment_files_bulk');
 
         try {
             $this->dispatchCommand(new BulkDeleteAttachmentsCommand($attachmentIds));
@@ -367,35 +367,8 @@ class AttachmentController extends PrestaShopAdminController
         ];
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return array
-     */
-    private function getBulkAttachmentsFromRequest(Request $request): array
-    {
-        $attachmentIds = $request->request->all('attachment_files_bulk');
-
-        foreach ($attachmentIds as $i => $attachmentId) {
-            $attachmentIds[$i] = (int) $attachmentId;
-        }
-
-        return $attachmentIds;
-    }
-
-    /**
-     * @return array
-     */
     private function getAttachmentToolbarButtons(): array
     {
-        $toolbarButtons = [];
-
-        $toolbarButtons['add'] = [
-            'href' => $this->generateUrl('admin_attachments_create'),
-            'desc' => $this->trans('Add new file', [], 'Admin.Catalog.Feature'),
-            'icon' => 'add_circle_outline',
-        ];
-
-        return $toolbarButtons;
+        return $this->getAddToolbarButton('admin_attachments_create', $this->trans('Add new file', [], 'Admin.Catalog.Feature'));
     }
 }

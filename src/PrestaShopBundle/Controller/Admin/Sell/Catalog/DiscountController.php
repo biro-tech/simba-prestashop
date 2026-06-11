@@ -368,16 +368,6 @@ class DiscountController extends PrestaShopAdminController
     }
 
     /**
-     * @param Request $request
-     *
-     * @return int[]
-     */
-    private function getBulkDiscountsFromRequest(Request $request): array
-    {
-        return array_map('intval', $request->request->all('discount_bulk'));
-    }
-
-    /**
      * Process bulk action for discount status enabling.
      *
      * @param Request $request
@@ -416,7 +406,7 @@ class DiscountController extends PrestaShopAdminController
     protected function bulkUpdateStatus(Request $request, bool $enable): RedirectResponse
     {
         try {
-            $discountIds = $this->getBulkDiscountsFromRequest($request);
+            $discountIds = $this->getBulkIdsFromRequest($request, 'discount_bulk');
 
             $command = new BulkUpdateDiscountsStatusCommand($discountIds, $enable);
 
@@ -445,7 +435,7 @@ class DiscountController extends PrestaShopAdminController
     public function bulkDeleteAction(Request $request): RedirectResponse
     {
         try {
-            $discountIds = $this->getBulkDiscountsFromRequest($request);
+            $discountIds = $this->getBulkIdsFromRequest($request, 'discount_bulk');
 
             $command = new BulkDeleteDiscountsCommand($discountIds);
 

@@ -536,20 +536,9 @@ class SupplierController extends PrestaShopAdminController
         );
     }
 
-    /**
-     * @return array
-     */
     private function getSupplierIndexToolbarButtons(): array
     {
-        $toolbarButtons = [];
-
-        $toolbarButtons['add'] = [
-            'href' => $this->generateUrl('admin_suppliers_create'),
-            'desc' => $this->trans('Add new supplier', [], 'Admin.Catalog.Feature'),
-            'icon' => 'add_circle_outline',
-        ];
-
-        return $toolbarButtons;
+        return $this->getAddToolbarButton('admin_suppliers_create', $this->trans('Add new supplier', [], 'Admin.Catalog.Feature'));
     }
 
     /**

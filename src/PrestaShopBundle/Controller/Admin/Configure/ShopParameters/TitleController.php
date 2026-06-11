@@ -145,7 +145,7 @@ class TitleController extends PrestaShopAdminController
     #[AdminSecurity("is_granted('delete', request.get('_legacy_controller'))", redirectRoute: 'admin_title_index')]
     public function bulkDeleteAction(Request $request): RedirectResponse
     {
-        $titleIds = $this->getBulkTitlesFromRequest($request);
+        $titleIds = $this->getBulkIdsFromRequest($request, 'title_title_bulk');
 
         try {
             $this->dispatchCommand(new BulkDeleteTitleCommand($titleIds));
@@ -158,17 +158,6 @@ class TitleController extends PrestaShopAdminController
         }
 
         return $this->redirectToRoute('admin_title_index');
-    }
-
-    private function getBulkTitlesFromRequest(Request $request): array
-    {
-        $titleIds = $request->request->all('title_title_bulk');
-
-        foreach ($titleIds as $i => $titleId) {
-            $titleIds[$i] = (int) $titleId;
-        }
-
-        return $titleIds;
     }
 
     private function getErrorMessages(): array

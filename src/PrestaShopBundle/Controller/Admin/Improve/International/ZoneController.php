@@ -236,7 +236,7 @@ class ZoneController extends PrestaShopAdminController
     #[AdminSecurity("is_granted('delete', request.get('_legacy_controller'))", redirectRoute: 'admin_zones_index')]
     public function bulkDeleteAction(Request $request): RedirectResponse
     {
-        $zoneIds = $this->getBulkZonesFromRequest($request);
+        $zoneIds = $this->getBulkIdsFromRequest($request, 'zone_bulk');
 
         try {
             $this->dispatchCommand(new BulkDeleteZoneCommand($zoneIds));
@@ -265,7 +265,7 @@ class ZoneController extends PrestaShopAdminController
     public function bulkToggleStatus(string $status, Request $request): RedirectResponse
     {
         $status = $status === 'enable';
-        $zoneIds = $this->getBulkZonesFromRequest($request);
+        $zoneIds = $this->getBulkIdsFromRequest($request, 'zone_bulk');
 
         try {
             $this->dispatchCommand(new BulkToggleZoneStatusCommand($status, $zoneIds));
@@ -330,31 +330,8 @@ class ZoneController extends PrestaShopAdminController
         ];
     }
 
-    /**
-     * Collects zone IDs from request.
-     *
-     * @param Request $request
-     *
-     * @return array
-     */
-    private function getBulkZonesFromRequest(Request $request): array
-    {
-        $zoneIds = $request->request->all('zone_bulk');
-
-        return array_map('intval', $zoneIds);
-    }
-
-    /**
-     * @return array
-     */
     private function getZoneToolbarButtons(): array
     {
-        return [
-            'add' => [
-                'href' => $this->generateUrl('admin_zones_create'),
-                'desc' => $this->trans('Add new zone', [], 'Admin.International.Feature'),
-                'icon' => 'add_circle_outline',
-            ],
-        ];
+        return $this->getAddToolbarButton('admin_zones_create', $this->trans('Add new zone', [], 'Admin.International.Feature'));
     }
 }

@@ -304,7 +304,7 @@ class CustomerThreadController extends PrestaShopAdminController
     #[AdminSecurity("is_granted('delete', request.get('_legacy_controller'))", redirectRoute: 'admin_customer_threads')]
     public function bulkDeleteAction(Request $request): RedirectResponse
     {
-        $customerThreadId = $this->getBulkCustomerThreadsFromRequest($request);
+        $customerThreadId = $this->getBulkIdsFromRequest($request, 'customer_thread_bulk');
 
         try {
             $this->dispatchCommand(new BulkDeleteCustomerThreadCommand($customerThreadId));
@@ -356,24 +356,6 @@ class CustomerThreadController extends PrestaShopAdminController
                 ),
             ],
         ];
-    }
-
-    /**
-     * Collects customer thread IDs from request.
-     *
-     * @param Request $request
-     *
-     * @return array
-     */
-    private function getBulkCustomerThreadsFromRequest(Request $request): array
-    {
-        $customerThreadIds = $request->request->all('customer_thread_bulk');
-
-        if (!is_array($customerThreadIds)) {
-            return [];
-        }
-
-        return array_map('intval', $customerThreadIds);
     }
 
     private function handleCustomerThreadStatusUpdate(int $customerThreadId, string $newStatus)

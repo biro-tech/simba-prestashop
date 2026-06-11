@@ -283,7 +283,7 @@ class ManufacturerController extends PrestaShopAdminController
     #[AdminSecurity("is_granted('delete', request.get('_legacy_controller'))", redirectRoute: 'admin_manufacturers_index')]
     public function bulkDeleteAction(Request $request)
     {
-        $manufacturerIds = $this->getBulkManufacturersFromRequest($request);
+        $manufacturerIds = $this->getBulkIdsFromRequest($request, 'manufacturer_bulk');
 
         try {
             $this->dispatchCommand(new BulkDeleteManufacturerCommand($manufacturerIds));
@@ -307,7 +307,7 @@ class ManufacturerController extends PrestaShopAdminController
     #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))", redirectRoute: 'admin_manufacturers_index')]
     public function bulkEnableAction(Request $request)
     {
-        $manufacturerIds = $this->getBulkManufacturersFromRequest($request);
+        $manufacturerIds = $this->getBulkIdsFromRequest($request, 'manufacturer_bulk');
 
         try {
             $this->dispatchCommand(new BulkToggleManufacturerStatusCommand($manufacturerIds, true));
@@ -332,7 +332,7 @@ class ManufacturerController extends PrestaShopAdminController
     #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))", redirectRoute: 'admin_manufacturers_index')]
     public function bulkDisableAction(Request $request)
     {
-        $manufacturerIds = $this->getBulkManufacturersFromRequest($request);
+        $manufacturerIds = $this->getBulkIdsFromRequest($request, 'manufacturer_bulk');
 
         try {
             $this->dispatchCommand(new BulkToggleManufacturerStatusCommand($manufacturerIds, false));
@@ -524,7 +524,7 @@ class ManufacturerController extends PrestaShopAdminController
     #[AdminSecurity("is_granted('delete', request.get('_legacy_controller'))", redirectRoute: 'admin_manufacturers_index')]
     public function bulkDeleteAddressAction(Request $request)
     {
-        $addressIds = $this->getBulkAddressesFromRequest($request);
+        $addressIds = $this->getBulkIdsFromRequest($request, 'manufacturer_address_bulk');
 
         try {
             $this->dispatchCommand(new BulkDeleteAddressCommand($addressIds));
@@ -732,34 +732,6 @@ class ManufacturerController extends PrestaShopAdminController
                 'Admin.Notifications.Error'
             ),
         ];
-    }
-
-    /**
-     * @return array<int, int>
-     */
-    private function getBulkManufacturersFromRequest(Request $request): array
-    {
-        $manufacturerIds = $request->request->all('manufacturer_bulk');
-
-        foreach ($manufacturerIds as $i => $manufacturerId) {
-            $manufacturerIds[$i] = (int) $manufacturerId;
-        }
-
-        return $manufacturerIds;
-    }
-
-    /**
-     * @return array<int, int>
-     */
-    private function getBulkAddressesFromRequest(Request $request): array
-    {
-        $addressIds = $request->request->all('manufacturer_address_bulk');
-
-        foreach ($addressIds as $i => $addressId) {
-            $addressIds[$i] = (int) $addressId;
-        }
-
-        return $addressIds;
     }
 
     /**

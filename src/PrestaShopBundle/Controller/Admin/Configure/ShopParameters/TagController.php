@@ -146,7 +146,7 @@ class TagController extends PrestaShopAdminController
     #[AdminSecurity("is_granted('delete', request.get('_legacy_controller'))", redirectRoute: 'admin_tags_index')]
     public function bulkDeleteAction(Request $request): RedirectResponse
     {
-        $tagIds = $this->getBulkTagsFromRequest($request);
+        $tagIds = $this->getBulkIdsFromRequest($request, 'tag_tag_bulk');
 
         try {
             $this->dispatchCommand(new BulkDeleteTagCommand($tagIds));
@@ -159,17 +159,6 @@ class TagController extends PrestaShopAdminController
         }
 
         return $this->redirectToRoute('admin_tags_index');
-    }
-
-    private function getBulkTagsFromRequest(Request $request): array
-    {
-        $tagIds = $request->request->all('tag_tag_bulk');
-
-        foreach ($tagIds as $i => $tagId) {
-            $tagIds[$i] = (int) $tagId;
-        }
-
-        return $tagIds;
     }
 
     /**

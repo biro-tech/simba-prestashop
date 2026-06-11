@@ -489,7 +489,7 @@ class CategoryController extends PrestaShopAdminController
     public function bulkEnableStatusAction(Request $request)
     {
         try {
-            $categoryIds = $this->getBulkCategoriesFromRequest($request);
+            $categoryIds = $this->getBulkIdsFromRequest($request, 'category_id_category');
 
             $command = new BulkEnableCategoriesCommand($categoryIds);
 
@@ -518,7 +518,7 @@ class CategoryController extends PrestaShopAdminController
     public function bulkDisableStatusAction(Request $request)
     {
         try {
-            $categoryIds = $this->getBulkCategoriesFromRequest($request);
+            $categoryIds = $this->getBulkIdsFromRequest($request, 'category_id_category');
 
             $command = new BulkDisableCategoriesCommand($categoryIds);
 
@@ -846,22 +846,6 @@ class CategoryController extends PrestaShopAdminController
                 )
             ),
         ];
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return array
-     */
-    private function getBulkCategoriesFromRequest(Request $request)
-    {
-        $categoryIds = $request->request->all('category_id_category');
-
-        foreach ($categoryIds as $i => $categoryId) {
-            $categoryIds[$i] = (int) $categoryId;
-        }
-
-        return $categoryIds;
     }
 
     /**
