@@ -823,8 +823,15 @@ class Install extends AbstractInstall
         }
 
         // Set logo configuration
-        if (file_exists(_PS_IMG_DIR_ . 'logo.png')) {
-            [$width, $height] = getimagesize(_PS_IMG_DIR_ . 'logo.png');
+        $logoFile = null;
+        foreach (['logo.png', 'logo.jpg'] as $candidate) {
+            if (file_exists(_PS_IMG_DIR_ . $candidate)) {
+                $logoFile = $candidate;
+                break;
+            }
+        }
+        if ($logoFile) {
+            [$width, $height] = getimagesize(_PS_IMG_DIR_ . $logoFile);
             Configuration::updateGlobalValue('SHOP_LOGO_WIDTH', round($width));
             Configuration::updateGlobalValue('SHOP_LOGO_HEIGHT', round($height));
         }

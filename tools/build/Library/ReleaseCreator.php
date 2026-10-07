@@ -79,7 +79,7 @@ class ReleaseCreator
         // Build and Development Tools
         'composer\.json$',
         '(.*)?\.composer$',
-        '.*\.eslintrc$',
+        '.*\.eslintrc(\\..*)?$',
         '.*\.eslintignore$',
         '.*\.editorconfig$',
         '.*\.babelrc$',
@@ -221,10 +221,9 @@ class ReleaseCreator
         $this->projectPath = realpath(__DIR__ . '/../../..');
         $this->version = $version ? $version : $this->getCurrentVersion();
         $this->zipFileName = "prestashop_$this->version.zip";
-        // Keep files for tests (tests, git and docker folders)
+        // Keep files for tests (tests and docker folders)
         if (!$keepTests) {
             $this->patternsRemoveList[] = 'tests(\-legacy)?$';
-            $this->patternsRemoveList[] = '(.*)?\.git(.*)?$';
             $this->patternsRemoveList[] = '.docker';
             $this->patternsRemoveList[] = 'docker-compose\.yml$';
             $this->patternsRemoveList[] = '((?<!_dev\/)package\.json)$';
